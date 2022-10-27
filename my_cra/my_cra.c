@@ -24,13 +24,8 @@ void CRA(char x[], char y[], unsigned int bitLength, char *output){
     char tmpCarry = '0';
 
     for(unsigned int i = bitLength; i > 0; i--){
-        if (i == bitLength){
-            output[i] = calcS(x[i-1],y[i-1],'0');
-            tmpCarry = calcCout(x[i-1],y[i-1],'0');
-        } else {
-            output[i] = calcS(x[i-1],y[i-1],tmpCarry);
-            tmpCarry = calcCout(x[i-1],y[i-1],tmpCarry);
-        }
+        output[i] = calcS(x[i-1],y[i-1],tmpCarry);
+        tmpCarry = calcCout(x[i-1],y[i-1],tmpCarry);
     }
 
     output[0] = tmpCarry;
