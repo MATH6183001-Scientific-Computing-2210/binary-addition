@@ -7,6 +7,14 @@ import json
 import random
 random.seed(1412)
 
+def get_list_students():
+    output_list = []
+    with open('list_students.txt') as file:
+        for line in file:
+            output_list.append({'id':line.rstrip()})
+        
+    return output_list
+
 def get_file_zip():
     output_list = []
     for file in os.listdir('.'):
@@ -31,7 +39,12 @@ def preprocess_all(files):
         # print('sed -i \'\' "s/STUDENT/{}/g" m{}.c'.format(file['id'],file['id']).split(" "))
         # process = subprocess.run('sed -i \'\' "s/STUDENT/{}/g" m{}.c'.format(file['id'],file['id']).split(" "),
         #     universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        os.system('sed -i \'\' "s/STUDENT/{}/g" m{}.c'.format(file['id'],file['id']))
+        
+        # mac
+        # os.system('sed -i \'\' "s/STUDENT/{}/g" m{}.c'.format(file['id'],file['id']))
+        
+        # linux
+        os.system('sed -i "s/STUDENT/{}/g" m{}.c'.format(file['id'],file['id']))
         
 
 def compile_all(files):
@@ -78,8 +91,10 @@ def run_all(N):
                 universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             if (process.returncode == 0):
+                print(json.loads(process.stdout))
                 report_list.append(json.loads(process.stdout))
             else:
+                print({'id': item['id'], 'execution_time':'error','msg':process.stderr})
                 report_list.append({'id': item['id'], 'execution_time':'error','msg':process.stderr})
 
     return report_list
@@ -87,6 +102,9 @@ def run_all(N):
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
+        if sys.argv[1] == 'get_list_students':
+            get_list_students()
+
         if sys.argv[1] == 'get_file_zip':
             files = get_file_zip()
             print(files)
@@ -97,11 +115,13 @@ if __name__ == "__main__":
                 unzip_file(file)
         
         if sys.argv[1] == 'preprocess_all':
-            files = get_file_zip()
+            # files = get_file_zip()
+            files = get_list_students()
             preprocess_all(files)
 
         if sys.argv[1] == 'compile_all':
-            files = get_file_zip()
+            # files = get_file_zip()
+            files = get_list_students()
             success_list, failed_list = compile_all(files)
             with open("success_list.json", "w") as outfile:
                 json.dump(success_list, outfile)
@@ -110,6 +130,6 @@ if __name__ == "__main__":
                 json.dump(failed_list, outfile)
         
         if sys.argv[1] == 'run_all':
-            report_list = run_all(1000)
+            report_list = run_all(5)
             with open("report_list.json", "w") as outfile:
                 json.dump(report_list, outfile)

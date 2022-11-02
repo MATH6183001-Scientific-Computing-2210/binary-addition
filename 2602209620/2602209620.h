@@ -1,0 +1,1 @@
+void CLA(char a[], char b[], unsigned int bitLength, char *output); 

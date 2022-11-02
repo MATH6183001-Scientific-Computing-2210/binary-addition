@@ -1,0 +1,1 @@
+void CLA(char x[], char y[], unsigned int N, char *sout);
