@@ -1,2 +1,10 @@
 *.o
 *.out
+*.exe
+__MACOSX/
+m*.c
+*.zip
+my_cla/
+[0-9]*/
+.DS_Store
+.vscode/
