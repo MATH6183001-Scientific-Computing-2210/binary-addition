@@ -130,6 +130,6 @@ if __name__ == "__main__":
                 json.dump(failed_list, outfile)
         
         if sys.argv[1] == 'run_all':
-            report_list = run_all(200)
+            report_list = run_all(1000)
             with open("report_list.json", "w") as outfile:
                 json.dump(report_list, outfile)
